@@ -624,16 +624,24 @@ public class BankSubjectiveToDoView extends RelativeLayout implements View.OnCli
                     subjective_answer_frame_one.setVisibility(VISIBLE);
                     subjective_answer_frame_two.setVisibility(GONE);
                     subjective_answer_frame_three.setVisibility(GONE);
-                    subjective_img_one.setImageBitmap(BitmapFactory.decodeFile(imgFilePathList.get(i)));
+
+                    Glide.with(mContext)
+                            .load(imgFilePathList.get(i))
+                            .into(subjective_img_one);
                     break;
                 case 1:
                     subjective_answer_frame_two.setVisibility(VISIBLE);
                     subjective_answer_frame_three.setVisibility(GONE);
-                    subjective_img_two.setImageBitmap(BitmapFactory.decodeFile(imgFilePathList.get(i)));
+
+                    Glide.with(mContext)
+                            .load(imgFilePathList.get(i))
+                            .into(subjective_img_two);
                     break;
                 case 2:
                     subjective_answer_frame_three.setVisibility(VISIBLE);
-                    subjective_img_three.setImageBitmap(BitmapFactory.decodeFile(imgFilePathList.get(i)));
+                    Glide.with(mContext)
+                            .load(imgFilePathList.get(i))
+                            .into(subjective_img_three);
                     break;
                 default:
                     QZXTools.popCommonToast(getContext(), "imgFileList大小超过3个了", false);

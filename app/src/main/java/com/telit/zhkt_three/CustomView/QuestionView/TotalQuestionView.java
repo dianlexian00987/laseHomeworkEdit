@@ -205,7 +205,7 @@ public class TotalQuestionView extends RelativeLayout implements View.OnClickLis
                 int questionType = questionInfo.getQuestionType();
                 if (questionType == Constant.Subject_Item) {
                     String attachment = null;
-                    if (questionInfo.getOwnList().size() > 0) {
+                    if (questionInfo.getOwnList()!=null && questionInfo.getOwnList().size() > 0) {
                         //这里只有主观题打回重做
                         WorkOwnResult workOwnResult = questionInfo.getOwnList().get(0);
                         if (taskStatus.equals(Constant.Review_Status)) {
@@ -245,104 +245,122 @@ public class TotalQuestionView extends RelativeLayout implements View.OnClickLis
 
                 //当前题型是连线题
                 if (questionType == Constant.Linked_Line) {
-                    WorkOwnResult workOwnResult = questionInfo.getOwnList().get(0);
-                    LocalTextAnswersBean localTextAnswersBean = new LocalTextAnswersBean();
-                    localTextAnswersBean.setHomeworkId(questionInfo.getHomeworkId());
-                    localTextAnswersBean.setQuestionId(questionInfo.getId());
-                    localTextAnswersBean.setQuestionType(questionInfo.getQuestionType());
-                    localTextAnswersBean.setAnswerContent(workOwnResult.getAnswerContent());
-                    localTextAnswersBean.setUserId(UserUtils.getUserId());
+                    List<WorkOwnResult> ownList = questionInfo.getOwnList();
+                    if (ownList!=null && ownList.size()>0){
+                        WorkOwnResult workOwnResult = questionInfo.getOwnList().get(0);
+                        LocalTextAnswersBean localTextAnswersBean = new LocalTextAnswersBean();
+                        localTextAnswersBean.setHomeworkId(questionInfo.getHomeworkId());
+                        localTextAnswersBean.setQuestionId(questionInfo.getId());
+                        localTextAnswersBean.setQuestionType(questionInfo.getQuestionType());
+                        localTextAnswersBean.setAnswerContent(workOwnResult.getAnswerContent());
+                        localTextAnswersBean.setUserId(UserUtils.getUserId());
 //                                QZXTools.logE("Save localTextAnswersBean=" + localTextAnswersBean, null);
-                    //插入或者更新数据库
-                    MyApplication.getInstance().getDaoSession().getLocalTextAnswersBeanDao().insertOrReplace(localTextAnswersBean);
+                        //插入或者更新数据库
+                        MyApplication.getInstance().getDaoSession().getLocalTextAnswersBeanDao().insertOrReplace(localTextAnswersBean);
+                    }
+
                 }
 
                 //判断题
                 if (questionType == Constant.Judge_Item) {
-                    WorkOwnResult workOwnResult = questionInfo.getOwnList().get(0);
-                    //-------------------------答案保存，依据作业题目id
-                    LocalTextAnswersBean localTextAnswersBean = new LocalTextAnswersBean();
-                    localTextAnswersBean.setHomeworkId(questionInfo.getHomeworkId());
-                    localTextAnswersBean.setQuestionId(questionInfo.getId());
-                    localTextAnswersBean.setUserId(UserUtils.getUserId());
-                    localTextAnswersBean.setQuestionType(questionInfo.getQuestionType());
-                    localTextAnswersBean.setAnswerContent(workOwnResult.getAnswerContent());
+                    List<WorkOwnResult> ownList = questionInfo.getOwnList();
+                    if (ownList!=null && ownList.size()>0){
+                        WorkOwnResult workOwnResult = questionInfo.getOwnList().get(0);
+                        //-------------------------答案保存，依据作业题目id
+                        LocalTextAnswersBean localTextAnswersBean = new LocalTextAnswersBean();
+                        localTextAnswersBean.setHomeworkId(questionInfo.getHomeworkId());
+                        localTextAnswersBean.setQuestionId(questionInfo.getId());
+                        localTextAnswersBean.setUserId(UserUtils.getUserId());
+                        localTextAnswersBean.setQuestionType(questionInfo.getQuestionType());
+                        localTextAnswersBean.setAnswerContent(workOwnResult.getAnswerContent());
 //                                QZXTools.logE("Save localTextAnswersBean=" + localTextAnswersBean, null);
-                    //插入或者更新数据库
-                    MyApplication.getInstance().getDaoSession().getLocalTextAnswersBeanDao().insertOrReplace(localTextAnswersBean);
+                        //插入或者更新数据库
+                        MyApplication.getInstance().getDaoSession().getLocalTextAnswersBeanDao().insertOrReplace(localTextAnswersBean);
+                    }
+
                 }
                 //单选 题
                 if (questionType == Constant.Single_Choose) {
-                    WorkOwnResult workOwnResult = questionInfo.getOwnList().get(0);
-                    //当前选中的下标
+                    List<WorkOwnResult> ownList = questionInfo.getOwnList();
+                    if (ownList!=null && ownList.size()>0){
+                        WorkOwnResult workOwnResult = questionInfo.getOwnList().get(0);
+                        //当前选中的下标
 
-                    //-------------------------答案保存，依据作业题目id
-                    LocalTextAnswersBean localTextAnswersBean = new LocalTextAnswersBean();
-                    localTextAnswersBean.setHomeworkId(questionInfo.getHomeworkId());
-                    localTextAnswersBean.setQuestionId(questionInfo.getId());
-                    localTextAnswersBean.setUserId(UserUtils.getUserId());
-                    localTextAnswersBean.setQuestionType(questionInfo.getQuestionType());
-                    List<AnswerItem> answerItems = new ArrayList<>();
-                    AnswerItem answerItem = new AnswerItem();
-                    answerItem.setItemId(workOwnResult.getAnswerId());
-                    answerItem.setContent(workOwnResult.getAnswerContent());
-                    answerItems.add(answerItem);
-                    localTextAnswersBean.setList(answerItems);
+                        //-------------------------答案保存，依据作业题目id
+                        LocalTextAnswersBean localTextAnswersBean = new LocalTextAnswersBean();
+                        localTextAnswersBean.setHomeworkId(questionInfo.getHomeworkId());
+                        localTextAnswersBean.setQuestionId(questionInfo.getId());
+                        localTextAnswersBean.setUserId(UserUtils.getUserId());
+                        localTextAnswersBean.setQuestionType(questionInfo.getQuestionType());
+                        List<AnswerItem> answerItems = new ArrayList<>();
+                        AnswerItem answerItem = new AnswerItem();
+                        answerItem.setItemId(workOwnResult.getAnswerId());
+                        answerItem.setContent(workOwnResult.getAnswerContent());
+                        answerItems.add(answerItem);
+                        localTextAnswersBean.setList(answerItems);
 //                                QZXTools.logE("Save localTextAnswersBean=" + localTextAnswersBean, null);
-                    //插入或者更新数据库
-                    MyApplication.getInstance().getDaoSession().getLocalTextAnswersBeanDao().insertOrReplace(localTextAnswersBean);
+                        //插入或者更新数据库
+                        MyApplication.getInstance().getDaoSession().getLocalTextAnswersBeanDao().insertOrReplace(localTextAnswersBean);
+                    }
 
                 }
                 //多选题
                 if (questionType == Constant.Multi_Choose) {
                     List<WorkOwnResult> ownList = questionInfo.getOwnList();
-                    LocalTextAnswersBean localTextAnswersBean = new LocalTextAnswersBean();
-                    localTextAnswersBean.setHomeworkId(questionInfo.getHomeworkId());
-                    localTextAnswersBean.setQuestionId(questionInfo.getId());
-                    localTextAnswersBean.setUserId(UserUtils.getUserId());
-                    localTextAnswersBean.setQuestionType(questionInfo.getQuestionType());
-                    List<AnswerItem> answerItems = new ArrayList<>();
-                    for (int j = 0; j < ownList.size(); j++) {
-                        AnswerItem answerItem = new AnswerItem();
-                        answerItem.setItemId(ownList.get(j).getAnswerId());
-                        answerItem.setContent(ownList.get(j).getAnswerContent());
-                        answerItems.add(answerItem);
-                    }
-                    localTextAnswersBean.setList(answerItems);
+                    if (ownList!=null && ownList.size()>0){
+                        LocalTextAnswersBean localTextAnswersBean = new LocalTextAnswersBean();
+                        localTextAnswersBean.setHomeworkId(questionInfo.getHomeworkId());
+                        localTextAnswersBean.setQuestionId(questionInfo.getId());
+                        localTextAnswersBean.setUserId(UserUtils.getUserId());
+                        localTextAnswersBean.setQuestionType(questionInfo.getQuestionType());
+                        List<AnswerItem> answerItems = new ArrayList<>();
+                        for (int j = 0; j < ownList.size(); j++) {
+                            AnswerItem answerItem = new AnswerItem();
+                            answerItem.setItemId(ownList.get(j).getAnswerId());
+                            answerItem.setContent(ownList.get(j).getAnswerContent());
+                            answerItems.add(answerItem);
+                        }
+                        localTextAnswersBean.setList(answerItems);
 //                                QZXTools.logE("Save localTextAnswersBean=" + localTextAnswersBean, null);
-                    //插入或者更新数据库
-                    MyApplication.getInstance().getDaoSession().getLocalTextAnswersBeanDao().insertOrReplace(localTextAnswersBean);
+                        //插入或者更新数据库
+                        MyApplication.getInstance().getDaoSession().getLocalTextAnswersBeanDao().insertOrReplace(localTextAnswersBean);
+                    }
+
+
 
                 }
                 //填空题
                 if (questionType == Constant.Fill_Blank) {
                     //-------------------------答案保存，依据作业题目id
                     List<WorkOwnResult> ownList = questionInfo.getOwnList();
-                    LocalTextAnswersBean localTextAnswersBean = new LocalTextAnswersBean();
-                    localTextAnswersBean.setHomeworkId(questionInfo.getHomeworkId());
-                    localTextAnswersBean.setQuestionId(questionInfo.getId());
-                    localTextAnswersBean.setUserId(UserUtils.getUserId());
-                    localTextAnswersBean.setQuestionType(questionInfo.getQuestionType());
-                    List<AnswerItem> answerItems = new ArrayList<>();
-                    List<String> answers = new ArrayList<>();
-                    for (int j = 0; j < ownList.size(); j++) {
-                        //以及遍历的选项布局获取子类
-                        FillBlankToDoView blankedView = (FillBlankToDoView) total_options_layout.getChildAt(j);
-                        AnswerItem answerItem = new AnswerItem();
-                        answerItem.setItemId(ownList.get(j).getAnswerId());
-                        //保存文本内容:采用index:content形式
+                    if (ownList!=null && ownList.size()>0) {
+                        LocalTextAnswersBean localTextAnswersBean = new LocalTextAnswersBean();
+                        localTextAnswersBean.setHomeworkId(questionInfo.getHomeworkId());
+                        localTextAnswersBean.setQuestionId(questionInfo.getId());
+                        localTextAnswersBean.setUserId(UserUtils.getUserId());
+                        localTextAnswersBean.setQuestionType(questionInfo.getQuestionType());
+                        List<AnswerItem> answerItems = new ArrayList<>();
+                        List<String> answers = new ArrayList<>();
+                        for (int j = 0; j < ownList.size(); j++) {
+                            //以及遍历的选项布局获取子类
+                            FillBlankToDoView blankedView = (FillBlankToDoView) total_options_layout.getChildAt(j);
+                            AnswerItem answerItem = new AnswerItem();
+                            answerItem.setItemId(ownList.get(j).getAnswerId());
+                            //保存文本内容:采用index:content形式
 //                                    answerItem.setContent(selectBeans.get(j).getIndex() + ":"
 //                                            + blankedView.fill_blank_content.getText().toString().trim());
 
-                        // blanknum从1开始，因为从零开始服务端拼写有问题
-                        answerItem.setBlanknum((j + 1) + "");
-                        answerItem.setContent(ownList.get(j).getAnswerContent());
-                        answerItems.add(answerItem);
-                    }
-                    localTextAnswersBean.setList(answerItems);
+                            // blanknum从1开始，因为从零开始服务端拼写有问题
+                            answerItem.setBlanknum((j + 1) + "");
+                            answerItem.setContent(ownList.get(j).getAnswerContent());
+                            answerItems.add(answerItem);
+                        }
+                        localTextAnswersBean.setList(answerItems);
 //                                QZXTools.logE("fill blank Save localTextAnswersBean=" + localTextAnswersBean, null);
-                    //插入或者更新数据库
-                    MyApplication.getInstance().getDaoSession().getLocalTextAnswersBeanDao().insertOrReplace(localTextAnswersBean);
+                        //插入或者更新数据库
+                        MyApplication.getInstance().getDaoSession().getLocalTextAnswersBeanDao().insertOrReplace(localTextAnswersBean);
+                    }
+
                 }
             }
 
